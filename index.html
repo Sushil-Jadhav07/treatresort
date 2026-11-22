@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/images/logo-navy.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Treat Hotels &amp; Resorts | Luxury Stays, Weddings &amp; Corporate Getaways in India</title>
+    <meta
+      name="description"
+      content="Book direct at Treat Hotels &amp; Resorts: 13 hotels and resorts across India for luxury stays, destination weddings, corporate events and fine dining. 40+ years of hospitality."
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <!--seo-head-->
+
+    <!-- Skip the intro animation on repeat visits (same session) and for reduced-motion users -->
+    <script>
+      try {
+        if (sessionStorage.getItem('treat-intro-seen') || matchMedia('(prefers-reduced-motion: reduce)').matches)
+          document.documentElement.classList.add('skip-intro')
+      } catch (e) {}
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Fonts stay render-blocking on purpose: loading them async swaps fonts after paint and pushes CLS above 0.1 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,300..600;1,6..72,300..600&family=Caveat:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <noscript>
+      <style>
+        [data-preloader] { display: none !important; }
+        body * { opacity: 1 !important; transform: none !important; }
+      </style>
+    </noscript>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

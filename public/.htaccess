@@ -1,0 +1,84 @@
+# ------------------------------------------------------------------
+# Treat Hotels & Resorts — Apache config for the Vite build (dist/)
+# Upload this file together with the contents of dist/ to your web root.
+# ------------------------------------------------------------------
+
+# No directory listings
+Options -Indexes -MultiViews
+
+# ---- Force HTTPS -------------------------------------------------
+# (remove this block if the site has no SSL certificate yet)
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ---- Single-page app fallback -----------------------------------
+# Any URL that is not a real file/folder is served by index.html
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# ---- MIME types --------------------------------------------------
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType video/mp4 .mp4
+  AddType font/woff2 .woff2
+  AddType text/javascript .js .mjs
+  AddType image/svg+xml .svg
+</IfModule>
+
+# ---- Compression -------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE text/javascript application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml application/xml font/woff2
+</IfModule>
+
+# ---- Browser caching ---------------------------------------------
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+
+  # the page itself must always be fresh so new deploys show up
+  ExpiresByType text/html "access plus 0 seconds"
+
+  # fingerprinted build files (assets/*-<hash>.js|css) never change
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+
+  ExpiresByType image/webp "access plus 6 months"
+  ExpiresByType image/png "access plus 6 months"
+  ExpiresByType image/jpeg "access plus 6 months"
+  ExpiresByType image/svg+xml "access plus 6 months"
+  ExpiresByType video/mp4 "access plus 6 months"
+  ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # ---- Security headers ----------------------------------------
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# Block access to hidden files such as .git or .env
+<FilesMatch "^\.(?!well-known)">
+  Require all denied
+</FilesMatch>

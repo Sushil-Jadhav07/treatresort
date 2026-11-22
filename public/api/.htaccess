@@ -1,0 +1,9 @@
+# Config and stored enquiries must never be downloadable
+<FilesMatch "^(config\.php|config\.sample\.php)$">
+  Require all denied
+</FilesMatch>
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^_data(/|$) - [F,L]
+</IfModule>
+Options -Indexes
